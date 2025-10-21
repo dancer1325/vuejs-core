@@ -1,25 +1,34 @@
 # @vue/compiler-sfc
 
-> Lower level utilities for compiling Vue Single File Components
-
-**Note: as of 3.2.13+, this package is included as a dependency of the main `vue` package and can be accessed as `vue/compiler-sfc`. This means you no longer need to explicitly install this package and ensure its version match that of `vue`'s. Just use the main `vue/compiler-sfc` deep import instead.**
-
-This package contains lower level utilities that you can use if you are writing a plugin / transform for a bundler or module system that compiles Vue Single File Components (SFCs) into JavaScript. It is used in [vue-loader](https://github.com/vuejs/vue-loader) and [@vitejs/plugin-vue](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue).
+* == low level utilities
+* allows
+  * compile Vue Single File Components (SFC)
+* | 3.2.13+,
+  * 👀MAIN `vue` package's dependency👀
+    * == `vue/compiler-sfc`
+    * == use -- through --- MAIN `vue`
+* uses as standalone |
+  * write a bundler OR module system's plugin / transform /
+    * compiles Vue Single File Components (SFCs) -- into -- JavaScript
+  * [vue-loader](https://github.com/vuejs/vue-loader)
+  * [@vitejs/plugin-vue](https://github.com/vitejs/vite-plugin-vue/tree/main/packages/plugin-vue)
 
 ## API
 
-The API is intentionally low-level due to the various considerations when integrating Vue SFCs in a build system:
+* low-level
+  * Reason: 🧠integrate Vue SFCs | build system🧠
+- Separate hot-module replacement (HMR) -- for -- script, template and styles
+  - ==
+    - template updates should NOT reset component state
+    - style updates should be performed WITHOUT component re-render
+- tool's plugin system can be used -- for -- pre-processor handling
+  * _Example:_ `<style lang="scss">` should be processed -- by the -- corresponding webpack loader
+- | SOME cases,
+  - ❌transformers of each block do NOT share the same execution context❌
+    * _Example:_ + `thread-loader` or other parallelized configurations -> `vue-loader`'s template sub-loader may NOT have access to the full SFC and its descriptor
 
-- Separate hot-module replacement (HMR) for script, template and styles
-
-  - template updates should not reset component state
-  - style updates should be performed without component re-render
-
-- Leveraging the tool's plugin system for pre-processor handling. e.g. `<style lang="scss">` should be processed by the corresponding webpack loader.
-
-- In some cases, transformers of each block in an SFC do not share the same execution context. For example, when used with `thread-loader` or other parallelized configurations, the template sub-loader in `vue-loader` may not have access to the full SFC and its descriptor.
-
-The general idea is to generate a facade module that imports the individual blocks of the component. The trick is the module imports itself with different query strings so that the build system can handle each request as "virtual" modules:
+* 's goal
+  * facade module / imports the component's individual blocks  (-- via -- different query strings)
 
 ```
                                   +--------------------+

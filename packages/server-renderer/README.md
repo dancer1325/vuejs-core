@@ -1,6 +1,12 @@
 # @vue/server-renderer
 
-**Note: as of 3.2.13+, this package is included as a dependency of the main `vue` package and can be accessed as `vue/server-renderer`. This means you no longer need to explicitly install this package and ensure its version match that of `vue`'s. Just use the `vue/server-renderer` deep import instead.**
+* | 3.2.13+, 
+  * included -- as a -- main `vue` package's dependency 
+    * == `vue/server-renderer`
+    * -> 
+      * NO need to explicitly install this package
+      * `vue`'s parent package version == `vue/server-renderer`'s package version 
+      * use `vue/server-renderer` deep import (TODO: ❓)
 
 ## Basic API
 
@@ -34,7 +40,8 @@ const app = createSSRApp({
 
 ### Handling Teleports
 
-If the rendered app contains teleports, the teleported content will not be part of the rendered string. Instead, they are exposed under the `teleports` property of the ssr context object:
+If the rendered app contains teleports, the teleported content will not be part of the rendered string
+* Instead, they are exposed under the `teleports` property of the ssr context object:
 
 ```js
 const ctx = {}
@@ -62,7 +69,8 @@ function renderToNodeStream(input: App | VNode, context?: SSRContext): Readable
 renderToNodeStream(app).pipe(res)
 ```
 
-**Note:** This method is not supported in the ESM build of `@vue/server-renderer`, which is decoupled from Node.js environments. Use `pipeToNodeWritable` instead.
+**Note:** This method is not supported in the ESM build of `@vue/server-renderer`, which is decoupled from Node.js environments
+* Use `pipeToNodeWritable` instead.
 
 ### `pipeToNodeWritable`
 
